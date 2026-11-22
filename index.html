@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>测一测，你的隐藏搞钱体质是什么</title>
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;700;900&amp;display=swap">
+<style>
+:root{
+  --cream:#f4f0e5;
+  --paper:#fbf8f1;
+  --ink:#20302b;
+  --soft:#4d5a53;
+  --muted:#7d8a83;
+  --gold:#b08a4d;
+  --sage:#8c9990;
+  --brick:#a96a52;
+  --line:rgba(32,48,43,.16);
+  --line-strong:rgba(32,48,43,.34);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+  color:var(--ink);
+  background:#e7e1d3;
+  font-size:15px;
+  line-height:1.7;
+}
+.serif{font-family:"Noto Serif SC","Songti SC","SimSun",serif}
+.stage{
+  max-width:480px;min-height:100vh;margin:0 auto;
+  background:var(--cream);
+  position:relative;
+  box-shadow:0 0 0 1px rgba(32,48,43,.08),0 24px 60px rgba(32,48,43,.12);
+  display:flex;flex-direction:column;
+}
+.view{display:none;flex:1;padding:30px 26px calc(34px + env(safe-area-inset-bottom));animation:fade .35s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.view{animation:none}}
+
+.kicker{
+  font-size:10.5px;letter-spacing:.32em;color:var(--muted);
+  text-transform:uppercase;display:flex;align-items:center;gap:10px;
+}
+.kicker::after{content:"";flex:1;height:1px;background:var(--line)}
+.hero-frame{
+  margin:22px 0 26px;padding:10px;border:1px solid var(--line);background:var(--paper);
+}
+.hero-frame img{display:block;width:100%;height:auto}
+.eyebrow{font-size:12px;letter-spacing:.28em;color:var(--gold);margin-bottom:10px}
+h1{
+  font-weight:900;font-size:30px;line-height:1.35;letter-spacing:.01em;margin-bottom:14px;
+}
+.subtitle{color:var(--soft);font-size:14.5px;margin-bottom:26px}
+.points{list-style:none;margin-bottom:30px;border-top:1px solid var(--line)}
+.points li{
+  display:flex;align-items:center;gap:12px;padding:13px 2px;border-bottom:1px solid var(--line);
+  font-size:13.5px;color:var(--ink);
+}
+.points .ck{
+  flex:none;width:20px;height:20px;border-radius:50%;border:1px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;color:var(--gold);
+}
+.points .ck svg{width:11px;height:11px}
+.points b{font-weight:600;color:var(--ink)}
+.points span{color:var(--soft)}
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:16px;border:1px solid var(--ink);
+  background:var(--ink);color:var(--cream);
+  font-family:"Noto Serif SC",serif;font-size:17px;font-weight:700;letter-spacing:.08em;
+  cursor:pointer;transition:background .25s,color .25s;
+}
+.btn:active{background:var(--gold);border-color:var(--gold)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:active{background:var(--ink);color:var(--cream)}
+.btn svg{width:16px;height:16px}
+.foot-note{
+  margin-top:18px;font-size:11.5px;line-height:1.8;color:var(--muted);text-align:center;
+}
+.disclaimer{
+  margin-top:14px;padding:12px 14px;border:1px solid var(--line);
+  font-size:11.5px;line-height:1.8;color:var(--soft);background:var(--paper);
+}
+
+/* quiz */
+.quiz-head{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.quiz-no{font-family:"Noto Serif SC",serif;font-weight:700;font-size:14px;letter-spacing:.12em;color:var(--gold);flex:none}
+.track{flex:1;height:2px;background:var(--line);position:relative}
+.track i{position:absolute;left:0;top:0;height:100%;background:var(--gold);transition:width .3s ease}
+.q-text{font-family:"Noto Serif SC",serif;font-weight:700;font-size:21px;line-height:1.55;margin-bottom:24px}
+.opts{list-style:none;display:flex;flex-direction:column;gap:12px}
+.opt{
+  display:flex;align-items:center;gap:14px;padding:15px 16px;
+  border:1px solid var(--line-strong);background:var(--paper);cursor:pointer;
+  transition:background .2s,border-color .2s,color .2s;
+}
+.opt .lt{
+  flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--line-strong);
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Noto Serif SC",serif;font-size:13px;font-weight:700;color:var(--gold);
+}
+.opt .ot{font-size:14.5px;line-height:1.55;color:var(--ink)}
+.opt:active,.opt.picked{background:var(--ink);border-color:var(--ink)}
+.opt:active .ot,.opt.picked .ot{color:var(--cream)}
+.opt:active .lt,.opt.picked .lt{border-color:var(--gold);color:var(--gold)}
+.back-link{
+  margin-top:22px;background:none;border:none;color:var(--muted);font-size:12.5px;
+  letter-spacing:.14em;cursor:pointer;font-family:inherit;
+}
+
+/* result */
+.result-top{text-align:center;margin-bottom:8px}
+.medal{
+  width:104px;height:104px;margin:6px auto 16px;border-radius:50%;
+  border:1px solid var(--gold);background:var(--paper);
+  display:flex;align-items:center;justify-content:center;color:var(--gold);
+  position:relative;
+}
+.medal::before{content:attr(data-no);position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  background:var(--cream);padding:0 8px;font-family:"Noto Serif SC",serif;font-size:12px;letter-spacing:.14em;color:var(--gold)}
+.medal svg{width:52px;height:52px}
+h2{font-family:"Noto Serif SC",serif;font-weight:900;font-size:27px;margin-bottom:8px}
+.r-tagline{font-family:"Noto Serif SC",serif;font-size:14px;color:var(--soft);margin-bottom:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:28px}
+.chip{
+  padding:5px 12px;border:1px solid var(--line-strong);font-size:12px;color:var(--soft);
+  letter-spacing:.06em;background:var(--paper);
+}
+.meters{border:1px solid var(--line);background:var(--paper);padding:18px 18px 14px;margin-bottom:28px}
+.meters h3,.sec h3{
+  font-family:"Noto Serif SC",serif;font-weight:700;font-size:13px;letter-spacing:.2em;color:var(--gold);
+  margin-bottom:14px;display:flex;align-items:center;gap:10px;
+}
+.meters h3::after,.sec h3::after{content:"";flex:1;height:1px;background:var(--line)}
+.meter{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.meter .ml{flex:none;width:62px;font-size:12.5px;color:var(--soft)}
+.segs{flex:1;display:flex;gap:5px}
+.seg{flex:1;height:5px;background:rgba(32,48,43,.1)}
+.seg.on{background:var(--ink)}
+.meter .mv{flex:none;width:18px;text-align:right;font-family:"Noto Serif SC",serif;font-size:12.5px;color:var(--gold)}
+.sec{margin-bottom:22px}
+.sec h3 .no{color:var(--gold)}
+.sec p{font-size:14px;color:var(--soft);line-height:1.85}
+.quote{
+  margin:8px 0 26px;padding:20px 20px;border-left:3px solid var(--gold);
+  background:var(--paper);font-family:"Noto Serif SC",serif;font-weight:700;
+  font-size:15.5px;line-height:1.8;color:var(--ink);
+}
+.btn-row{display:flex;flex-direction:column;gap:12px}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- 首页 -->
+  <section class="view active" id="view-home">
+    <div class="kicker">MONEY PERSONA</div>
+    <div class="hero-frame"><img src="assets/hero.jpg" alt="职场搞钱主视觉"></div>
+    <div class="eyebrow">隐藏搞钱体质</div>
+    <h1 class="serif">测一测，你的隐藏搞钱体质是什么</h1>
+    <p class="subtitle">凭你的职场小习惯，揭秘你的真实搞钱人设</p>
+    <ul class="points">
+      <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span><b>职场百态</b><span>｜你是反卷先锋还是老黄牛</span></li>
+      <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span><b>搞钱雷达</b><span>｜测测你的副业潜力值</span></li>
+      <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span><b>消费心理</b><span>｜你的钱都花哪了</span></li>
+      <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span><b>隐藏体质</b><span>｜解锁你的专属财富画像</span></li>
+    </ul>
+    <button class="btn" id="start-btn">点击测试
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+    <p class="foot-note">本测试仅为趣味娱乐，不具备财务规划建议，结果仅供参考。</p>
+    <div class="disclaimer">本测试为原创趣味互动，不构成任何财务、职业规划建议。</div>
+  </section>
+
+  <!-- 答题 -->
+  <section class="view" id="view-quiz">
+    <div class="quiz-head">
+      <div class="quiz-no" id="quiz-no">01 / 32</div>
+      <div class="track"><i id="progress" style="width:0%"></i></div>
+    </div>
+    <div class="q-text" id="q-text"></div>
+    <ul class="opts" id="opts"></ul>
+    <button class="back-link" id="back-btn">← 上一题</button>
+  </section>
+
+  <!-- 结果 -->
+  <section class="view" id="view-result">
+    <div class="result-top">
+      <div class="kicker" style="margin-bottom:20px">你的搞钱人设</div>
+      <div class="medal" id="medal" data-no="01"><span id="medal-icon"></span></div>
+      <h2 id="r-name"></h2>
+      <p class="r-tagline" id="r-tagline"></p>
+      <div class="chips" id="r-chips"></div>
+    </div>
+    <div class="meters">
+      <h3>趣味指数</h3>
+      <div id="meter-list"></div>
+    </div>
+    <div class="sec"><h3><span class="no">01</span> 工作状态</h3><p id="s-work"></p></div>
+    <div class="sec"><h3><span class="no">02</span> 搞钱体质</h3><p id="s-money"></p></div>
+    <div class="sec"><h3><span class="no">03</span> 消费习惯</h3><p id="s-spend"></p></div>
+    <div class="sec"><h3><span class="no">04</span> 隐藏一面</h3><p id="s-hidden"></p></div>
+    <div class="sec"><h3><span class="no">05</span> 适合你的搞钱路子</h3><p id="s-fit"></p></div>
+    <div class="quote" id="r-quote"></div>
+    <div class="disclaimer" style="margin-top:0;margin-bottom:24px">本测试为原创趣味互动，不构成任何财务、职业规划建议。</div>
+    <div class="btn-row">
+      <button class="btn" id="retry-btn">重新测试</button>
+      <button class="btn ghost" id="home-btn">回到首页</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const QUESTIONS = [{"q": "发工资当天，你的第一反应是：", "opts": [{"t": "先把该存的转走，剩下的才敢花", "k": "cunqian"}, {"t": "犒劳自己！购物车终于可以清了", "k": "sancai"}, {"t": "工资就是路过我账户的数字，账单一还没了", "k": "jianxie"}, {"t": "截图发群里聊两句，气氛组也算我一个", "k": "qingxu"}]}, {"q": "老板在会上画大饼，你：", "opts": [{"t": "认真听，万一真实现了呢", "k": "heima"}, {"t": "表面点头，内心已经开始想下班吃什么", "k": "fanjuan"}, {"t": "当场盘算这个项目能不能写进简历", "k": "fuye"}, {"t": "先信一半，万一是真的呢，我运气一向不差", "k": "jinli"}]}, {"q": "看到朋友圈有人晒收益、晒 offer：", "opts": [{"t": "点赞评论“求带”，然后继续刷手机", "k": "foxi"}, {"t": "有点酸，但更想知道人家怎么做到的", "k": "fuye"}, {"t": "真心为对方高兴，顺手聊两句", "k": "qingxu"}, {"t": "转发给自己立 flag：明天我也开始", "k": "jianxie"}]}, {"q": "副业第一笔小钱到账，你会：", "opts": [{"t": "立刻全部花掉，这是“意外之财”", "k": "sancai"}, {"t": "存起来，这是新事业的启动资金", "k": "cunqian"}, {"t": "请朋友喝东西，人情比钱重要", "k": "qingxu"}, {"t": "觉得自己是天选之子，马上研究下一个", "k": "jinli"}]}, {"q": "周一早上的闹钟响了：", "opts": [{"t": "按掉再睡五分钟，但总能卡点精准到公司", "k": "heima"}, {"t": "立刻起床，规律让我安心", "k": "laohuangniu"}, {"t": "边洗漱边听播客，时间管理大师", "k": "fuye"}, {"t": "躺床上先刷十分钟招聘软件", "k": "fanjuan"}]}, {"q": "工位上你一定会放：", "opts": [{"t": "贴着下班倒计时，拒绝无效加班", "k": "fanjuan"}, {"t": "网红零食和小摆件，工资就花在这些快乐上", "k": "sancai"}, {"t": "便签和计划表，任务排得明明白白", "k": "laohuangniu"}, {"t": "一堆“以后用得上”的小物件", "k": "jianxie"}]}, {"q": "加班到很晚，你的想法：", "opts": [{"t": "加班费或调休到位就行，按规矩来", "k": "laohuangniu"}, {"t": "摸鱼式加班，活慢慢干，别想 PUA 我", "k": "fanjuan"}, {"t": "顺便把自己的事也干了，时间复用", "k": "fuye"}, {"t": "深夜容易 emo，点开购物软件下两单", "k": "sancai"}]}, {"q": "关于存钱计划，你：", "opts": [{"t": "有清晰的习惯，发薪先存", "k": "cunqian"}, {"t": "每月都立 flag，月底 flag 倒一片", "k": "jianxie"}, {"t": "钱够花就行，没必要苦自己", "k": "foxi"}, {"t": "总觉得自己马上会有“横财”", "k": "jinli"}]}, {"q": "群里突然发红包，你：", "opts": [{"t": "秒点开，手速是练过的", "k": "jinli"}, {"t": "看一眼数字，抢完说谢谢", "k": "laohuangniu"}, {"t": "抢完立刻发一个回去，气氛组担当", "k": "qingxu"}, {"t": "上班时间我才不盯着群消息抢红包", "k": "fanjuan"}]}, {"q": "同事临时找你帮忙：", "opts": [{"t": "能帮就帮，职场人缘很重要", "k": "qingxu"}, {"t": "先看自己的活干没干完", "k": "laohuangniu"}, {"t": "心情好就帮，间歇性热心肠", "k": "jianxie"}, {"t": "顺手帮，攒人情以后好开口", "k": "heima"}]}, {"q": "购物软件给你推“限时优惠”：", "opts": [{"t": "理性对比，用不上再便宜也不买", "k": "cunqian"}, {"t": "“限时”两个字让我冲动下单", "k": "sancai"}, {"t": "买之前先问一圈朋友，大家说好看才下单", "k": "qingxu"}, {"t": "优惠是商家的套路，我不上钩", "k": "fanjuan"}]}, {"q": "你理想中的工作状态：", "opts": [{"t": "稳定、规律，不用大起大落", "k": "laohuangniu"}, {"t": "一专多能，最好有几摊自己的事", "k": "fuye"}, {"t": "同事好相处，上班心情好最重要", "k": "qingxu"}, {"t": "没人催我最理想，拒绝被卷", "k": "fanjuan"}]}, {"q": "开会时被领导突然点名：", "opts": [{"t": "平时有准备，张口就来", "k": "heima"}, {"t": "先愣一下，然后镇定地接住", "k": "laohuangniu"}, {"t": "用幽默化解，逗笑全场", "k": "qingxu"}, {"t": "大脑空白，全靠临场发挥", "k": "jianxie"}]}, {"q": "手机里收藏最多的内容：", "opts": [{"t": "各种“搞钱路子”教程，吃灰中", "k": "jianxie"}, {"t": "技能提升干货，真的会看", "k": "fuye"}, {"t": "表情包和搞笑段子，社交弹药", "k": "qingxu"}, {"t": "不怎么收藏，但真要用时总能找到办法", "k": "heima"}]}, {"q": "月底发现账户余额还很健康：", "opts": [{"t": "那是我应得的，自律的回报", "k": "cunqian"}, {"t": "惊喜，感觉像捡到钱", "k": "jinli"}, {"t": "没什么概念，有钱就正常花", "k": "foxi"}, {"t": "趁还有，赶紧安排个小奖励", "k": "sancai"}]}, {"q": "面对一份又难又烦的任务：", "opts": [{"t": "按部就班拆成小块啃完", "k": "laohuangniu"}, {"t": "先拖两天，最后通宵超常发挥", "k": "heima"}, {"t": "边吐槽边干，吐槽是生产力", "k": "fanjuan"}, {"t": "先拖着，等 deadline 临近再一口气搞定", "k": "jianxie"}]}, {"q": "“下班”两个字对你意味着：", "opts": [{"t": "到点就撤，多一秒都是浪费", "k": "fanjuan"}, {"t": "经常最后一个走，活没干完不踏实", "k": "laohuangniu"}, {"t": "下班是副业的开始", "k": "fuye"}, {"t": "下班等于回血，先躺平再说", "k": "foxi"}]}, {"q": "你怎么看待“运气”：", "opts": [{"t": "我运气一直不错，抽奖经常中", "k": "jinli"}, {"t": "运气是实力的一部分，机会给有准备的人", "k": "heima"}, {"t": "随缘，不指望也不拒绝", "k": "foxi"}, {"t": "运气不如自己手里的存款靠谱", "k": "cunqian"}]}, {"q": "外卖点餐，你通常：", "opts": [{"t": "固定几家，选择困难不如不选", "k": "laohuangniu"}, {"t": "看优惠和满减，精打细算", "k": "cunqian"}, {"t": "看心情，今天想吃啥就点啥", "k": "sancai"}, {"t": "拼单凑满减，抽无门槛券这种事我经常中", "k": "jinli"}]}, {"q": "突然收到一笔意外小退款、小红包：", "opts": [{"t": "天选锦鲤就是我，开心一整天", "k": "jinli"}, {"t": "存起来，意外的钱也要管好", "k": "cunqian"}, {"t": "马上找个理由花掉", "k": "sancai"}, {"t": "没特别感觉，放着呗", "k": "foxi"}]}, {"q": "关于“跳槽”，你的态度：", "opts": [{"t": "不动则已，一动就要跳到更好的平台", "k": "heima"}, {"t": "随时关注机会，骑驴找马", "k": "fuye"}, {"t": "不开心就想跑，但只是想想", "k": "jianxie"}, {"t": "到哪都一样，不如先调整心态", "k": "foxi"}]}, {"q": "团队合作里你最像：", "opts": [{"t": "边界感最强，到点提醒大家收工", "k": "fanjuan"}, {"t": "气氛润滑剂，有我不冷场", "k": "qingxu"}, {"t": "点子王，方案一个接一个", "k": "fuye"}, {"t": "关键时刻的救火队员", "k": "heima"}]}, {"q": "看到“教你搞钱”的广告：", "opts": [{"t": "一眼识别套路，不浪费时间", "k": "fanjuan"}, {"t": "偶尔点进去看看，万一是真的", "k": "jinli"}, {"t": "收藏等于学会，然后没有然后", "k": "jianxie"}, {"t": "我更信自己慢慢积累", "k": "cunqian"}]}, {"q": "周末两天你一般怎么过：", "opts": [{"t": "充电学习，给自己投资", "k": "fuye"}, {"t": "彻底躺平，谁也别找我", "k": "foxi"}, {"t": "出门玩总能遇到新机会和有意思的人", "k": "jinli"}, {"t": "处理家务和杂事，规律生活", "k": "laohuangniu"}]}, {"q": "工资到账后，你的账单：", "opts": [{"t": "先储蓄再消费，顺序不能乱", "k": "cunqian"}, {"t": "消费优先，快乐无价", "k": "sancai"}, {"t": "没啥规划，稀里糊涂就没了", "k": "jianxie"}, {"t": "量入为出，每笔心里有数", "k": "laohuangniu"}]}, {"q": "你最受不了的职场情况：", "opts": [{"t": "无效内卷，比谁走得晚", "k": "fanjuan"}, {"t": "计划被打乱，节奏全乱", "k": "laohuangniu"}, {"t": "啥情况都还行，我适应力强不挑", "k": "foxi"}, {"t": "一成不变，看不到新可能", "k": "fuye"}]}, {"q": "当你立了个“搞钱 flag”：", "opts": [{"t": "三分钟热度，一周后回归日常", "k": "jianxie"}, {"t": "我随手立的 flag，经常莫名其妙就成了", "k": "jinli"}, {"t": "先买装备和课程，仪式感拉满", "k": "sancai"}, {"t": "经常在关键时刻真的做成了", "k": "heima"}]}, {"q": "对“钱”的态度，你最认同：", "opts": [{"t": "钱是底气，存着才有安全感", "k": "cunqian"}, {"t": "钱是工具，花出去才是自己的", "k": "sancai"}, {"t": "钱够用就好，心态无价", "k": "foxi"}, {"t": "钱是结果，把事做好自然来", "k": "heima"}]}, {"q": "电梯里偶遇大领导：", "opts": [{"t": "主动打招呼，自然聊两句", "k": "qingxu"}, {"t": "安静站着不抢话，但这种场合我常遇到意外好事", "k": "jinli"}, {"t": "假装看手机，减少存在感", "k": "fanjuan"}, {"t": "不慌，正好让对方记住我", "k": "heima"}]}, {"q": "让你坚持做一件事的动力：", "opts": [{"t": "说不上什么动力，我经常被好运推着走", "k": "jinli"}, {"t": "看得见的回报与存款", "k": "cunqian"}, {"t": "兴趣和新鲜感", "k": "fuye"}, {"t": "一群人的氛围和鼓励", "k": "qingxu"}]}, {"q": "你的“搞钱盲区”最可能是：", "opts": [{"t": "想法太多，落地太少", "k": "fuye"}, {"t": "对自己太省，不敢享受", "k": "cunqian"}, {"t": "花钱太快，存不住", "k": "sancai"}, {"t": "太佛系，机会砸头上都不接", "k": "foxi"}]}, {"q": "测完这个测试，你打算：", "opts": [{"t": "先奖励自己点杯奶茶，再说以后", "k": "sancai"}, {"t": "截图发朋友圈立个新 flag", "k": "jianxie"}, {"t": "看完就忘，明天照常上班", "k": "foxi"}, {"t": "认真想想，从一个小习惯开始", "k": "heima"}]}];
+const RESULTS = {"jinli": {"name": "天选搞钱锦鲤型", "tagline": "没怎么使劲，好运总偷偷站我这边", "tags": ["意外之财", "抽奖体质", "贵人运", "松弛感"], "work": "你在职场属于运气型选手，临时救场、随机分组、突然点名这类事，结果往往对你有利。不是你不努力，而是你天生松弛，关键时刻反而不慌，机会愿意往你手里掉。", "money": "你的搞钱体质带点玄学，退款、红包、失而复得的小惊喜经常发生。你很少钻牛角尖，这种松弛感本身就是吸引力，身边人也愿意先想到你。", "spend": "你对钱没有强烈的控制欲，有钱就正常花，意外来的小钱也会大方分享。正因为不攥紧，钱反而像认识路一样，常回来找你。", "hidden": "看起来你全靠运气，其实你心态稳、不内耗，别人紧张到发挥失常时，你能保持正常水平。运气更像是你稳定情绪的副产品。", "fit": "适合需要和人打交道、机会随机出现的场景，比如内容创作、社群运营、活动策划。把随手做的事坚持下来，好运会从偶然变成稳定产出。", "meters": [3, 2, 4, 4], "quote": "别怀疑自己不配，那些接住的好运，都是你好心态挣来的。"}, "cunqian": {"name": "隐形存钱大佬型", "tagline": "嘴上天天哭穷，账户数字最诚实", "tags": ["低调", "自律", "安全感", "延迟满足"], "work": "你是团队里最稳的那类人，任务交给你不会掉链子，节奏不慌不忙。你不抢风头，但领导心里清楚谁靠谱，属于默默被信任的类型。", "money": "你的搞钱方式是把主动权握在自己手里，先存后花、量入为出。你不指望一夜翻身，更相信一笔一笔积累出来的确定性，存款是你最大的底气。", "spend": "你对用不上的东西有天然免疫力，冲动消费很少，习惯比价、冷静、做计划。偶尔被朋友说抠，但只有你知道，账户余额比一时的快乐更治愈。", "hidden": "你表面跟着喊穷，其实心里有本清清楚楚的账，目标感极强。你不是舍不得，而是愿意把钱花在真正重要的地方，这种克制很多人做不到。", "fit": "适合规律、可预期的路径，比如固定储蓄习惯、长期技能打磨、专业路线深耕。把自律用在一项硬技能上，稳定本身就是稀缺竞争力。", "meters": [4, 5, 3, 3], "quote": "不必向谁解释你的低调，悄悄变强的人，最后都过得很从容。"}, "sancai": {"name": "冲动散财童子型", "tagline": "赚钱能力在线，花钱速度更在线", "tags": ["情绪价值", "体验派", "快乐至上", "月光边缘"], "work": "你工作起来有冲劲，接到任务愿意使劲，属于花钱有动力、赚钱也有动力的类型。只要有想犒劳自己的目标，加班都没那么难熬。", "money": "你对搞钱不抗拒，甚至挺有欲望，问题主要出在留不住。钱在你账户里停留时间不长，你坚信花出去的才是自己的，体验和心情排在第一位。", "spend": "限时、限定、心情好、心情差，都能成为下单理由。你买的很多东西其实是在买情绪价值，拆快递的那几分钟，确实是你一天里最治愈的时刻。", "hidden": "看起来你只顾当下，其实你对自己挺诚实，愿意为喜欢的东西认真买单。你不是不懂规划，只是很难接受年轻时苦哈哈地活着这种设定。", "fit": "适合把兴趣和审美变成收入的路径，比如好物分享、内容种草、创意类工作。你天生懂什么让人愿意买单，把这份消费敏感度用在做内容上会很有优势。", "meters": [4, 1, 2, 4], "quote": "快乐没有错，只要给未来的自己留一点余粮，你会过得更踏实。"}, "laohuangniu": {"name": "稳健老黄牛型", "tagline": "不赌运气，只信一步一个脚印", "tags": ["踏实", "靠谱", "规律", "安全感"], "work": "你是职场里的定海神针，再琐碎的事到你手里也能被安排得明明白白。你不擅长抢功，但团队真离了你，很多流程会直接卡住。", "money": "你的搞钱观非常朴素：好好干活，拿稳定回报。你不羡慕别人的快钱，因为你知道自己承受不了大起大落，可预期的收入最让你安心。", "spend": "你消费有计划，大额支出会反复权衡，很少让自己陷入被动。你对稳定的偏好，会体现在作息、账单和社交这些生活细节里。", "hidden": "你看起来有点闷，其实责任心极强，答应的事一定办到。你不是没想法，而是习惯先把该做的事做完，再谈喜欢和理想。", "fit": "适合专业纵深和长期主义路线，比如考证、专精一门技术、规范成熟的大平台。你的护城河不是机灵，而是别人熬不住的稳定和持续。", "meters": [3, 4, 2, 3], "quote": "慢不是缺点，能一直走下去的人，最后都走到了。"}, "fuye": {"name": "副业雷达觉醒型", "tagline": "浑身是点子，就差按下开始键", "tags": ["点子王", "好奇心", "机会雷达", "行动待充值"], "work": "你对本职工作能胜任，但心思更活，总在观察这件事能不能变成自己的事。你接受新东西快，信息渠道比同事广，是朋友圈里的消息灵通人士。", "money": "你的搞钱雷达几乎常开，看到一个趋势就会本能地想我能不能做。想法和收藏都很多，真正落地的还不多，卡点往往不是能力，而是启动和坚持。", "spend": "你愿意为自我投资花钱，课程、工具、装备买了不少，其中有些在吃灰。下单那一刻最爽，因为它制造了我在进步的确定感。", "hidden": "你看起来浮躁，其实是对单一工资条缺乏安全感，想给自己多留一条路。你不是没长性，只是兴趣转移太快，需要一个真正能沉下去的方向。", "fit": "适合轻资产、可快速试错的路径，比如内容账号、小成本线上项目、技能接单。别再同时开十个坑，挑一个最顺手的先做满三个月，雷达才会变成结果。", "meters": [5, 2, 3, 4], "quote": "你缺的从来不是点子，是把一个想法做完的耐心。"}, "fanjuan": {"name": "职场反卷先锋型", "tagline": "只要我不卷，就没人能卷到我", "tags": ["边界感", "清醒", "拒绝内耗", "到点下班"], "work": "你对无效努力高度警惕，能一眼看穿表演式加班和重复造轮子。活你会干，但拒绝为了显得忙而忙，边界感是你职场生存的核心武器。", "money": "你不是不想搞钱，而是不愿用健康和生活去换。你更在意单位时间的性价比，与其耗着，不如把省下的精力留给自己的事和真正的生活。", "spend": "你的消费观同样反套路，对制造焦虑再卖货的营销免疫。你愿意为真实体验买单，但不会因为别人都有就跟风。", "hidden": "看起来你很佛系，其实你心里门儿清，只是把竞争欲收了起来。你不是没能力，而是主动选择不参与无意义的游戏，这份清醒在职场并不常见。", "fit": "适合结果导向、看重产出而非时长的环境，或能自由安排节奏的工作。把不被卷走的精力用在一个长期项目上，独立会变成真正的底气。", "meters": [3, 3, 5, 3], "quote": "不卷不是躺平，是把力气留给真正值得的事。"}, "jianxie": {"name": "间歇性搞钱狂魔型", "tagline": "踌躇满志有时，混吃等死有时", "tags": ["三分钟热度", "状态波动", "灵感型", "自我和解中"], "work": "你的工作状态像正弦曲线，状态来了效率惊人，能一口气干很多活；状态没了，坐在工位上只剩人在、魂不在。你不是能力差，是动力来得很随机。", "money": "搞钱欲望周期性爆发，看到励志故事当晚就能列计划，几天后计划开始落灰。你赚得到阶段性的钱，但持续性和稳定性是要修的课题。", "spend": "消费也跟着情绪走，立志存钱时极度克制，破防时又报复性消费。两个极端来回切换，月底常常疑惑钱到底去哪了。", "hidden": "看起来你不靠谱，其实你对自己有要求，否则不会反复立 flag。你只是还没找到能让自己长期投入的事，所以动力总靠外界点燃。", "fit": "适合短周期、反馈快、能不断换新鲜感的事，比如系列内容、项目制接单、活动型工作。把大目标拆成小块、用即时反馈喂自己，比硬扛自律更适合你。", "meters": [4, 2, 3, 3], "quote": "别急着否定自己，能反复重新开始，本身就是一种生命力。"}, "qingxu": {"name": "情绪价值变现型", "tagline": "高情商和好脾气，是我硬通货", "tags": ["高情商", "会来事", "人际润滑", "共情力"], "work": "你是团队里的气氛调节器，尴尬的会、难搞的关系、紧张的时刻，你一出手往往能缓和下来。你不一定业绩最猛，但一定是大家愿意合作的人。", "money": "你的搞钱方式很软，靠的是信任、口碑和让人舒服的能力。别人愿意把机会、资源和单子交给你，因为和你打交道的体验实在太好。", "spend": "你花钱挺看重一起的感觉，请客、拼单、维系关系你都愿意。你不太会为东西本身冲动，但会为这份人情值不值认真考虑。", "hidden": "看起来你只会搞关系，其实你观察力极强，能敏锐捕捉别人的情绪和需求。高情商不是天赋那么简单，背后是长期的克制和体贴。", "fit": "适合强人际属性的路径，比如客户对接、社群运营、销售、内容陪伴类。把让人舒服的能力产品化，口碑会持续带来转介绍。", "meters": [3, 3, 2, 5], "quote": "温柔是一种能力，能把它变成价值的人，都不简单。"}, "foxi": {"name": "佛系随缘躺平型", "tagline": "多钱少钱无所谓，心态好才是真的好", "tags": ["佛系", "低物欲", "钝感力", "情绪稳定"], "work": "你对职场起伏有种天然的钝感，表扬不飘、批评不崩，交给你的活会稳稳做完。你不主动争，但也很少掉链子，是团队里情绪成本最低的人。", "money": "你对搞钱没什么执念，够用就好，也不拿别人的节奏逼自己。你相信很多焦虑是比较出来的，与其追着数字跑，不如先把日子过舒服。", "spend": "你物欲不高，冲动消费少，钱花在刚需和让自己舒服的小事上。你对拥有这件事很淡，断舍离对你几乎没有心理负担。", "hidden": "看起来你不争不抢，其实是主动选择了低消耗的活法。你不是没能力上进，而是很早就想明白，不想用生活换钱、再用钱买生活。", "fit": "适合低压力、节奏稳定的环境，或能独处深耕的专业小事。哪天想多赚一点，只需把现有节奏里的一件小事做到极致，不必推翻自己。", "meters": [2, 3, 4, 2], "quote": "能在热闹的世界里保持松弛，本身就是一种难得的本事。"}, "heima": {"name": "潜力爆发黑马型", "tagline": "平时不显山露水，关键时刻一鸣惊人", "tags": ["抗压", "临场型", "藏拙", "后发制人"], "work": "你平时存在感不算强，甚至有点低调，但越到重要节点越能超常发挥。deadline、汇报、竞标这种高压场景，反而会把你的潜能逼出来。", "money": "你的搞钱节奏偏厚积薄发，平时默默攒本事，机会一来接得住。你不喜欢张扬，更相信结果说话，属于不鸣则已、一鸣惊人的类型。", "spend": "你消费比较克制，尤其不会在没把握时超前支出。你愿意把钱投在能提升自己的地方，而且通常是默默投入、不声张。", "hidden": "看起来你很普通，其实心里有股不服输的劲，只是不爱外露。你不是慢热，而是习惯准备好再出手，关键场合很少掉链子。", "fit": "适合有明确节点、能凭成果突围的路径，比如项目攻坚、技能认证、专业竞赛。平时多积累可展示的作品，机会来的时候，你这匹黑马才跑得出去。", "meters": [4, 4, 3, 3], "quote": "别着急被看见，你所有的默默准备，都会在某个时刻兑现。"}};
+const KEY_ORDER = ["jinli", "cunqian", "sancai", "laohuangniu", "fuye", "fanjuan", "jianxie", "qingxu", "foxi", "heima"];
+const METER_LABELS = ["搞钱欲","存钱欲","反卷值","社交电量"];
+const LETTERS = ["A","B","C","D"];
+
+const ICONS = {
+  jinli:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="14" r="6.5"/><circle cx="14" cy="24" r="6.5"/><circle cx="34" cy="24" r="6.5"/><circle cx="24" cy="34" r="6.5"/><path d="M24 40v3M24 43c3 0 5-1.5 6-3.5"/></svg>',
+  cunqian:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="22" cy="27" rx="14" ry="10"/><path d="M31 17l4-3 1 5"/><circle cx="35" cy="27" r="2.4"/><path d="M19 20h6M17 37v3M27 37v3"/></svg>',
+  sancai:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="22" cy="26" r="9"/><circle cx="22" cy="26" r="4"/><path d="M13 15c-3-3-6-3-8-1 2 0 5 1 7 4M31 15c3-3 6-3 8-1-2 0-5 1-7 4"/><path d="M38 6l1.6 4.4L44 12l-4.4 1.6L38 18l-1.6-4.4L32 12l4.4-1.6z"/></svg>',
+  laohuangniu:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="10"/><circle cx="24" cy="24" r="4"/></svg>',
+  fuye:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="9"/><path d="M24 24L36 14"/><circle cx="36" cy="14" r="1.8" fill="currentColor" stroke="none"/></svg>',
+  fanjuan:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8v34"/><path d="M14 12h20l-5 6 5 6H14"/><path d="M10 40L38 8"/></svg>',
+  jianxie:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M27 5L14 26h8l-4 17 16-22h-8z"/></svg>',
+  qingxu:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M24 39C11 29 8 19 15 14c4-2.8 9 .2 9 4 0-3.8 5-6.8 9-4 7 5 4 15-9 25z"/></svg>',
+  foxi:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 8A16 16 0 1 0 36 34"/><circle cx="37" cy="10" r="1.6" fill="currentColor" stroke="none"/></svg>',
+  heima:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M24 5l4 15 15 4-15 4-4 15-4-15L5 24l15-4z"/></svg>'
+};
+
+const views = {home:document.getElementById('view-home'),
+               quiz:document.getElementById('view-quiz'),
+               result:document.getElementById('view-result')};
+let answers = new Array(QUESTIONS.length).fill(null);
+let cur = 0;
+
+function show(name){
+  Object.values(views).forEach(v=>v.classList.remove('active'));
+  views[name].classList.add('active');
+  window.scrollTo({top:0});
+}
+function renderQuiz(){
+  const item = QUESTIONS[cur];
+  document.getElementById('quiz-no').textContent =
+    String(cur+1).padStart(2,'0')+' / '+QUESTIONS.length;
+  document.getElementById('progress').style.width = (cur/QUESTIONS.length*100)+'%';
+  document.getElementById('q-text').textContent = item.q;
+  const ul = document.getElementById('opts');
+  ul.innerHTML='';
+  item.opts.forEach((o,i)=>{
+    const li=document.createElement('li');
+    li.className='opt';
+    li.innerHTML='<span class="lt">'+LETTERS[i]+'</span><span class="ot">'+o.t+'</span>';
+    li.addEventListener('click',()=>pick(i,li));
+    ul.appendChild(li);
+  });
+  document.getElementById('back-btn').style.visibility = cur===0?'hidden':'visible';
+}
+function pick(i,li){
+  if(answers[cur]!==null) return;
+  answers[cur]=QUESTIONS[cur].opts[i].k;
+  li.classList.add('picked');
+  setTimeout(()=>{
+    if(cur<QUESTIONS.length-1){cur++;renderQuiz();}
+    else{renderResult();}
+  },240);
+}
+function renderResult(){
+  const scores={};
+  KEY_ORDER.forEach(k=>scores[k]=0);
+  answers.forEach(k=>{if(k)scores[k]++;});
+  let winner=KEY_ORDER[0];
+  KEY_ORDER.forEach(k=>{if(scores[k]>scores[winner])winner=k;});
+  const r=RESULTS[winner];
+  const no=String(KEY_ORDER.indexOf(winner)+1).padStart(2,'0');
+  document.getElementById('medal').setAttribute('data-no',no);
+  document.getElementById('medal-icon').innerHTML=ICONS[winner];
+  document.getElementById('r-name').textContent=r.name;
+  document.getElementById('r-tagline').textContent=r.tagline;
+  document.getElementById('r-chips').innerHTML=
+    r.tags.map(t=>'<span class="chip">'+t+'</span>').join('');
+  document.getElementById('meter-list').innerHTML=r.meters.map((v,i)=>{
+    let segs='';
+    for(let s=1;s<=5;s++) segs+='<span class="seg'+(s<=v?' on':'')+'"></span>';
+    return '<div class="meter"><span class="ml">'+METER_LABELS[i]+'</span>'+
+           '<span class="segs">'+segs+'</span><span class="mv">'+v+'</span></div>';
+  }).join('');
+  document.getElementById('s-work').textContent=r.work;
+  document.getElementById('s-money').textContent=r.money;
+  document.getElementById('s-spend').textContent=r.spend;
+  document.getElementById('s-hidden').textContent=r.hidden;
+  document.getElementById('s-fit').textContent=r.fit;
+  document.getElementById('r-quote').textContent=r.quote;
+  document.getElementById('progress').style.width='100%';
+  show('result');
+}
+function reset(){
+  answers=new Array(QUESTIONS.length).fill(null);
+  cur=0;
+}
+
+document.getElementById('start-btn').addEventListener('click',()=>{cur=0;renderQuiz();show('quiz');});
+document.getElementById('back-btn').addEventListener('click',()=>{
+  if(cur>0){answers[cur]=null;cur--;renderQuiz();}
+});
+document.getElementById('retry-btn').addEventListener('click',()=>{reset();renderQuiz();show('quiz');});
+document.getElementById('home-btn').addEventListener('click',()=>{reset();show('home');});
+</script>
+</body>
+</html>
